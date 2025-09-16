@@ -59,7 +59,18 @@ Three kinds of `awatiable objects` in Python:
   task1 = fetch_data(1)
   ```
 
-  just creates coroutine objects! So, when task1, a coroutine object, is awaited (ala `await task1`) the object is getting **scheduled** and **ran to completion** at the same time. As a result, we get no concurrency and no benefit of using **asyncio**.
+  just creates coroutine objects! So, when task1, a coroutine object, is awaited (ala `await task1`) the object is getting **scheduled** and **ran to completion** at the same time. As a result, we get no concurrency and no benefit of using **asyncio**. Just having asyncio is not a guarantee of concurrency.
+
+- **example3.py**
+
+  Python Script to show one way of correctly using asyncio to gain concurrency by using `tasks`. The key points in this script are using:
+
+  ```bash
+  task1 = asyncio.create_task(fetch_data(1))
+  task2 = asyncio.create_task(fetch_data(2))
+  ```
+
+  `asyncio.create_task()` creates tasks from the coroutine: `async def fetch_data(param)`. Creating tasks **schedule** a coroutine to run on the event loop, which was the key part missing example2.py.
 
 Stop 9:30
 https://www.youtube.com/watch?v=oAkLSJNr5zY
