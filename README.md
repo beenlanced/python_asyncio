@@ -53,5 +53,13 @@ Three kinds of `awatiable objects` in Python:
 
 - **example2.py**
 
+  Python Script that is a first attempt at converting the synchronous code to asynchonous. I introduce the **asyncio** library. There is a mistake in this script. I call task1 and task2 like I am calling functions as in the synchronous case. It runs in the same amount of time as example1.py's synchronous code -- still not getting concurrency benefits here. Why? Answer: The code is written such that one might suspect that calling the **coroutine** function `fetch_data()` creates a taske and a schedule. Well, it does not. Code like
+
+  ```bash
+  task1 = fetch_data(1)
+  ```
+
+  just creates coroutine objects! So, when task1, a coroutine object, is awaited (ala `await task1`) the object is getting **scheduled** and **ran to completion** at the same time. As a result, we get no concurrency and no benefit of using **asyncio**.
+
 Stop 9:30
 https://www.youtube.com/watch?v=oAkLSJNr5zY
