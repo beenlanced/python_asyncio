@@ -89,5 +89,25 @@ Three kinds of `awatiable objects` in Python:
 
   Notice the `await` runs whatever is ready so the results of 4 are very similar to example 3.
 
+- **example5.py**
+
+  Python Script to show what happens when the event loop get blocked with synchronous blocking code. This script creates tasks as before in the examples 3&4, but now we add :
+
+  ```bash
+  time.sleep(param)
+  ```
+
+  Instead of using asyncio.sleep
+
+  ```bash
+  await asyncio.sleep(param)
+  ```
+
+  time.sleep() IS NOT _awaitable_, so I can't say `await time.sleep(param)` as that will raise an exception. Plus, time.sleep() does not know how to suspend itself, therefore it blocks the event loop!
+
+- **example6.py**
+
+  Python Script to show what happens when the event loop get blocked with synchronous blocking code. This script creates tasks as before in the e
+
 Stop 9:30
 https://www.youtube.com/watch?v=oAkLSJNr5zY
