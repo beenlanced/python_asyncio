@@ -41,5 +41,17 @@ Three kinds of `awatiable objects` in Python:
 
 -
 
+#### Python Script descriptions
+
+- **terms.py**
+
+  Python scripts to highlight asyncio terminology in action. Simply uncomment and comment out pieces of code to show results.
+
+- **example1.py**
+
+  Python script that does not use asyncio at all. It is all synchronous code. No event loops at all. Notice here that there is a few seconds where we are waiting for the synchronous functions to complete. Asyncio would allow us to take run other processes during this down time.
+
+- **example2.py**
+
 Stop 9:30
 https://www.youtube.com/watch?v=oAkLSJNr5zY
