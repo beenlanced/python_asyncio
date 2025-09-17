@@ -107,7 +107,15 @@ Three kinds of `awatiable objects` in Python:
 
 - **example6.py**
 
-  Python Script to show what happens when the event loop get blocked with synchronous blocking code. This script creates tasks as before in the e
+  Python Script to show what happens when the event loop get blocked with synchronous blocking code, but we mitigate using some asynchronous methods. In this example, `async def fetch_data()` coroutine has been converted into a normal Python method `fetch_data()`. In the script, this function is passed to asyncio to pass this regular function to a thread. Which is an example of how to pass this thread to a process. This is accomplished by wrapping the `fetch_data` function in `asyncio.to_thread()`. this makes th function awaitable and essentially a `future`
 
-Stop 9:30
+  Note, `flush=true` in the print statements come out in the order expected since we are using threads and processes. Also notice because we are using threads to spawn new processes,I have to use
+
+  `if __name__ == "__main__":`
+
+  to make sure that the code runs correctly for each new process.
+
+  The time to run this script is larger than all of the previous examples because we ran it in to batches as tasks and threads, and then as two processes within the `with` block of code.
+
+Stop 50:00
 https://www.youtube.com/watch?v=oAkLSJNr5zY
