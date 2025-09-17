@@ -161,15 +161,19 @@ Three kinds of `awatiable objects` in Python:
   uv run -m scalene --html --outfile profile_report.html real_world_example_sync1.py
   ```
 
-  results in two files: `profile_report.html` and `profile_report.json`. Both give you an idea of where asynchronous process can help.
+  results in two files: `profile_report.html` and `profile_report.json`. Both give you an idea of where asynchronous or threads can help.
 
-  Looking at the html file in a browser indicates that `system time` is a lot of waiting on IObound operation time. The bulk of that system time occurs in the `dowload_single_image()` function. CPU based time is indciated by the higher Python related times which indicates areas for processes and thread incorporation.
+  Looking at the html file in a browser indicates that `system time` is a lot of waiting on IObound operation time. The bulk of that system time occurs in the `dowload_single_image()` function. CPU based time is indciated by the higher Python related times which indicates areas for processes incorporation.
 
   In the next python scripts I will attempt to make improvements.
 
 - **real_world_example_async1.py**
 
-  Python Script that asynchronously downloads and processes a bunch of image files used in exampl_sync1. Here, I am using asyncio. naively.
+  Python Script that asynchronously downloads and processes a bunch of image files used in exampl_sync1. Here, I am using asyncio only and not other libraries. Notice, I am using `requests` which is not an asynchronous library (i.e., awaitable), so I will need to use `threads` and use `asyncio` to manage those threads.
+
+  I use task groups as well to manage the threads.
+
+  Results show that download time improved. Processed time did not improve. Overall time descreased. Yay!
 
 Stop 50:00
 https://www.youtube.com/watch?v=oAkLSJNr5zY
