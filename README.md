@@ -117,5 +117,27 @@ Three kinds of `awatiable objects` in Python:
 
   The time to run this script is larger than all of the previous examples because we ran it in to batches as tasks and threads, and then as two processes within the `with` block of code.
 
+- **example7.py**
+
+  Python Script to show how we can schedule and await `tasks`. Here, I show how to run multiple tasks at onece using either of the following:
+
+  - `asyncio.gather(*tasks)` # gather
+    - Note `*tasks` used here **unpacks** the list. Unpacking is like entering all of the items of the list individually. Essentially, I am using programmatic methods to do that versus listing each individual item from the list. Similar `*coroutines` unpacking was also done.
+  - `asyncio.TaskGroup()` # taskgroups
+
+    - In this section using TaskGroup we apply a `context manager` that is async because I anticipate IO operations during set-up or teardowns. Recall, context manager in Python is an object that defines a temporary context for a block of code, ensuring that resources are properly set up at the beginning of the block and torn down (cleaned up) at the end, even if errors occur. A good example is the file handler:
+
+    ```bash
+    with open("my_file.txt", "w") as f:
+    f.write("Hello, world!")
+    # The file 'f' is automatically closed here, even if an error occurred during writing.
+    ```
+
+    - Notice, I am not `awaiting` anything with the task group. It `awaits` all tasks created for the group during exit of the context manager.
+
+  The key determination of whether to use `gather` or `task groups` might be based on how you want to handle errors/exceptions. With `asyncio.gather`, if you use the default of `return_exception=False`, then if one task fails it will raise the exception for that task, and not continue with the other tasks. As a result, there is the risk of orphaning tasks. With `return_exception=True`, if one task fails it will raise the exception for that task, but will continue with the other tasks. The results will point out which task did not succeed via an exception result.
+
+  In contrast, `task groups` will fail on a task and cancels all other tasks. It raises an exception group containing all exceptions from the failed tasks. It gives better errors and handles cleaning up the orphan task issue better. Used when you expect all tasks to run successfully.
+
 Stop 50:00
 https://www.youtube.com/watch?v=oAkLSJNr5zY
