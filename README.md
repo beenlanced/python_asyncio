@@ -2,7 +2,11 @@
 - `Coroutine` - special Python function that enables asynchronous programming
 - `CPU-bound processes`, processes
 - `IO-bound processes`,
+- `Pillow` de facto image processing package for Python,
 - `Python`
+- `requests` simplifies the process of making HTTP requests in Python,
+- `Scalene`
+- `uv`
 
 #### Synchronous Function
 
@@ -138,6 +142,34 @@ Three kinds of `awatiable objects` in Python:
   The key determination of whether to use `gather` or `task groups` might be based on how you want to handle errors/exceptions. With `asyncio.gather`, if you use the default of `return_exception=False`, then if one task fails it will raise the exception for that task, and not continue with the other tasks. As a result, there is the risk of orphaning tasks. With `return_exception=True`, if one task fails it will raise the exception for that task, but will continue with the other tasks. The results will point out which task did not succeed via an exception result.
 
   In contrast, `task groups` will fail on a task and cancels all other tasks. It raises an exception group containing all exceptions from the failed tasks. It gives better errors and handles cleaning up the orphan task issue better. Used when you expect all tasks to run successfully.
+
+- **real_world_example_sync1.py**
+
+  Python Script that synchronously downloads and processes a bunch of image files. The idea is to get a baseline set of download, processing, and execution times arrived at through synchronous file operations such that I want to show improvements using asynchronous techniques.
+
+  To determine where to apply the asynchronous operations it is important to determine what is IObound operations and what are CPUbound operations.
+
+  - CPUbound operations - These are operations where compute, calculate, process occur.
+
+  - IObound operations - These are operations where we have to wait for external events to complete like http requests.
+
+  Using Scalene is a Python way of determining operations. Scalene is a high-performance, high-precision profiler for Python, designed to help developers identify and optimize performance bottlenecks in their code. It offers a comprehensive view of how a Python program utilizes system resources, including CPU, GPU, and memory.
+
+  A sample of the command in action using `uv`
+
+  ```bash
+  uv run -m scalene --html --outfile profile_report.html real_world_example_sync1.py
+  ```
+
+  results in two files: `profile_report.html` and `profile_report.json`. Both give you an idea of where asynchronous process can help.
+
+  Looking at the html file in a browser indicates that `system time` is a lot of waiting on IObound operation time. The bulk of that system time occurs in the `dowload_single_image()` function. CPU based time is indciated by the higher Python related times which indicates areas for processes and thread incorporation.
+
+  In the next python scripts I will attempt to make improvements.
+
+- **real_world_example_async1.py**
+
+  Python Script that asynchronously downloads and processes a bunch of image files used in exampl_sync1. Here, I am using asyncio. naively.
 
 Stop 50:00
 https://www.youtube.com/watch?v=oAkLSJNr5zY
