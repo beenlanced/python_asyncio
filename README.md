@@ -175,5 +175,11 @@ Three kinds of `awatiable objects` in Python:
 
   Results show that download time improved. Processed time did not improve. Overall time descreased. Yay!
 
+- **real_world_example_async2.py**
+
+  Python Script that asynchronously downloads and processes a bunch of image files used in exampl_sync1. Here, I am using asyncio other Python libraries that help with asynchronous tasks. Here, I use `HTTPX` for http requests and `aiofiles` package for file processing.
+
+  Additionally, I am going to speed up CPUbound tasks using processes.
+
 Stop 50:00
 https://www.youtube.com/watch?v=oAkLSJNr5zY
