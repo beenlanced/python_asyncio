@@ -25,6 +25,16 @@ PROCESSED_DIR = Path("processed_images")
 
 
 def download_single_image(session: requests.Session, url: str, img_num: int) -> Path:
+    """Download the Single Image
+
+    Args:
+        session (requests.Session): the session to download the image
+        url (str): URL of the image 
+        img_num (int): the image number
+
+    Returns:
+        Path: The string path name
+    """
     print(f"Downloading {url}...")
     ts = int(time.time())
     url = f"{url}?ts={ts}"  # Add timestamp to avoid caching issues
@@ -43,6 +53,14 @@ def download_single_image(session: requests.Session, url: str, img_num: int) -> 
 
 
 def download_images(urls: list) -> list[Path]:
+    """_summary_
+
+    Args:
+        urls (list): List of string URLs
+
+    Returns:
+        list[Path]: List of directory paths
+    """
     with requests.Session() as session:
         img_paths = [
             download_single_image(session, url, img_num)
@@ -53,6 +71,14 @@ def download_images(urls: list) -> list[Path]:
 
 
 def process_single_image(orig_path: Path) -> Path:
+    """Process the original image
+
+    Args:
+        orig_path (Path): path of the original image
+
+    Returns:
+        Path: Path of the processed image
+    """
     save_path = PROCESSED_DIR / orig_path.name
 
     with Image.open(orig_path) as img:
@@ -98,6 +124,14 @@ def process_single_image(orig_path: Path) -> Path:
 
 
 def process_images(orig_paths: list[Path]) -> list[Path]:
+    """Processes all of the original images 
+
+    Args:
+        orig_paths (list[Path]): List of all of the original images
+
+    Returns:
+        list[Path]: List of image paths
+    """
     img_paths = [process_single_image(orig_path) for orig_path in orig_paths]
 
     return img_paths
