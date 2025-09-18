@@ -4,6 +4,7 @@ from pathlib import Path
 
 import aiofiles
 import httpx
+from concurrent.futures import ProcessPoolExecutor
 from PIL import Image
 
 IMAGE_URLS = [
@@ -26,28 +27,34 @@ ORIGINAL_DIR = Path("original_images")
 PROCESSED_DIR = Path("processed_images")
 
 #I removed session.get because not sure if that is threadable. Instead using requests.get()
-def download_single_image(url: str, img_num: int) -> Path:
-    """Download the Single Image
+async def download_single_image(
+    client: httpx.AsyncClient,
+    url: str,
+    img_num: int,
+) -> Path:
+    """Download the Single Image Using HTTPX asynchronous capabilities
 
     Args:
-        url (str): URL of the image 
+        client (httpx.AsyncClient): the asynchronous HTTP client
+        url (str): URL of the image
         img_num (int): the image number
 
     Returns:
-        Path: The string path name
+        Path: the string path name
     """
     print(f"Downloading {url}...")
     ts = int(time.time())
     url = f"{url}?ts={ts}"  # Add timestamp to avoid caching issues
-    response = requests.get(url, timeout=10, allow_redirects=True) #creates a new session for each url though
+
+    response = await client.get(url, timeout=10, follow_redirects=True)
     response.raise_for_status()
 
     filename = f"image_{img_num}.jpg"
     download_path = ORIGINAL_DIR / filename
 
-    with download_path.open("wb") as f:
-        for chunk in response.iter_content(chunk_size=8192):
-            f.write(chunk)
+    async with aiofiles.open(download_path, "wb") as f: #aiofiles to write asynchronously
+        async for chunk in response.aiter_bytes(chunk_size=8192): #async for iterator to go through chunk bytes asynchronously
+            await f.write(chunk)
 
     print(f"Downloaded and saved to: {download_path}")
     return download_path
@@ -63,16 +70,17 @@ async def download_images(urls: list) -> list[Path]:
     Returns:
         list[Path]: List of directory paths
     """
-    
-    async with asyncio.TaskGroup() as tg:
-        tasks = [
-            tg.create_task(asyncio.to_thread(download_single_image, url, img_num))
-            for img_num, url in enumerate(urls, start=1)
-        ]
+    async with httpx.AsyncClient() as client: #Reusing the same client for every download
+        async with asyncio.TaskGroup() as tg:
+            tasks = [
+                tg.create_task(download_single_image(client, url, img_num))
+                for img_num, url in enumerate(urls, start=1)
+            ]
 
-    img_paths = [task.result() for task in tasks]
+        img_paths = [task.result() for task in tasks]
 
     return img_paths
+
 
 
 def process_single_image(orig_path: Path) -> Path:
@@ -85,6 +93,7 @@ def process_single_image(orig_path: Path) -> Path:
         Path: Path of the processed image
     """
     save_path = PROCESSED_DIR / orig_path.name
+
 
     with Image.open(orig_path) as img:
         data = list(img.getdata())
@@ -138,15 +147,17 @@ async def process_images(orig_paths: list[Path]) -> list[Path]:
     Returns:
         list[Path]: List of image paths
     """
-    async with asyncio.TaskGroup() as tg:
+    loop = asyncio.get_running_loop()
+
+    with ProcessPoolExecutor() as executor:
         tasks = [
-            tg.create_task(asyncio.to_thread(process_single_image, orig_path))
+            loop.run_in_executor(executor, process_single_image, orig_path)
             for orig_path in orig_paths
         ]
 
-    img_paths = [task.result() for task in tasks]
+        processed_paths = await asyncio.gather(*tasks, return_exceptions=True)
 
-    return img_paths
+    return processed_paths
 
 
 async def main():

@@ -29,7 +29,7 @@ def download_single_image(url: str, img_num: int) -> Path:
     """Download the Single Image
 
     Args:
-        url (str): URL of the image 
+        url (str): URL of the image
         img_num (int): the image number
 
     Returns:
