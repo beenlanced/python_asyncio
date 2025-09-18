@@ -181,5 +181,11 @@ Three kinds of `awatiable objects` in Python:
 
   Additionally, I am going to speed up CPUbound tasks using processes.
 
+  After running the script, I observed a significant reduction in both IObound and CPUbound processes. Total overall execution decreased significantly.
+
+- **real_world_example_async3.py**
+
+  Python Script that asynchronously downloads and processes a bunch of image files used in exampl_sync1. Here, I am using asyncio other Python libraries that
+
 Stop 50:00
 https://www.youtube.com/watch?v=oAkLSJNr5zY
