@@ -1,7 +1,7 @@
 # Demo UV Application - An Example for How to Build Smart Python Projects Using UV.
 
 <div align="center">
-    <img alt="ASYNCIO image" src="./imgs/asyncio.jpeg" width="150%" height="200">
+    <img alt="ASYNCIO image" src="./imgs/asyncio.jpeg" width="50%" height="200">
 </div>
 
 [img source: Python's asynci: Hands-On Walkthrough](https://realpython.com/async-io-python/)
