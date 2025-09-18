@@ -1,4 +1,4 @@
-# Demo UV Application - An Example for How to Build Smart Python Projects Using UV.
+# Python AsyncIO - How to Write Asynchronous Python Code
 
 <div align="center">
     <img alt="ASYNCIO image" src="./imgs/asyncio.jpeg" width="50%" height="200">
