@@ -5,7 +5,9 @@
 - `Pillow` de facto image processing package for Python,
 - `Python`
 - `requests` simplifies the process of making HTTP requests in Python,
+- `ruff` , Python linter and formatter to help check asyncio errors
 - `Scalene`
+- `Semaphore` control access to a shared resource by limiting the number of concurrent tasks that can access it
 - `uv`
 
 #### Synchronous Function
@@ -185,7 +187,27 @@ Three kinds of `awatiable objects` in Python:
 
 - **real_world_example_async3.py**
 
-  Python Script that asynchronously downloads and processes a bunch of image files used in exampl_sync1. Here, I am using asyncio other Python libraries that
+  Python Script that asynchronously downloads and processes a bunch of image files used in exampl_sync1. Here, I am using asyncio other Python libraries that speed up IObound and CPUbound tasks similar to the async2 example. However, I am improving on that former script by including code, asyncio's `Semafore`, to manage resources. Here, the general idea is to show how to not overwhelm a system by restricting number of processes at a time. Imagine if you tried performing 1000's of operations at a time, it may overwhelm some systems.
+
+  An asyncio semaphore in Python is a synchronization primitive that controls access to a shared resource by limiting the number of concurrent tasks that can access it. It is useful for managing resources like database connections or API requests to avoid overwhelming the system.
+
+  After running the script, I observed a significant reduction in both IObound and CPUbound processes. Total overall execution decreased significantly, but not as much as in async2. The differences here is that we limit processes to four at one time and I can see that I execute four processes and as a process finishes I am able to start a new process. In short, providing a more managed approach to processing versus the "shotgun, everything all at once" approach.
+
+#### Special
+
+I have added the `ruff` linter and code formatter to help assist in discovering possible asyncio issues.
+
+To add `ruff` for development perposes using `uv` simply type the following
+
+```bash
+uv add --dev ruff
+```
+
+Then to run a check of all of the code
+
+```bash
+uv run ruff check
+```
 
 Stop 50:00
 https://www.youtube.com/watch?v=oAkLSJNr5zY
