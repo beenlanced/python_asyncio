@@ -314,7 +314,7 @@ I would like to extend my gratitude to all the individuals and organizations who
 
 Specifically, I would like to acknowledge:
 
--Cory Schaffer for his [Cory Schaffer: Python Tutorial: AsyncIO - Complete Guide to Asynchronous Programming with Animations](https://www.youtube.com/watch?v=oAkLSJNr5zY)
+- Cory Schaffer for his [Cory Schaffer: Python Tutorial: AsyncIO - Complete Guide to Asynchronous Programming with Animations](https://www.youtube.com/watch?v=oAkLSJNr5zY)
 
 - The folks at **Real Python** for helping to put terminology in the proper context [Real Python](https://realpython.com/async-io-python/)
 
